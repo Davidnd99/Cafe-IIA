@@ -17,17 +17,17 @@ import java.sql.Statement;
 public class OracleConnection {
     
     private Connection conn = null;
-    private static String ip = "db4free.net";
+    private static String ip = "b0ve.com";
     private static int puerto = 3306;
-    private static String db = "bebidacaliente";
-    private static String user = "chaimadavid";
-    private static String pass = "cafeintegracion";
-    private static String extraConf = "?Reconnect=true&useSSL=false";
+    private static String extraConf = "";
     
     public OracleConnection(char tipo) throws ClassNotFoundException, SQLException{
         if (tipo == 'F') {
             // Librería de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
+            String user = "cafe-04";
+            String db = "cafe04";
+            String pass = "pass";
             conn = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + puerto + "/" + db + extraConf, user, pass);
             System.out.println("Conexion Fria");
             //1+conn = (OracleConnection) DriverManager.getConnection("jdbc:mysql://:3306/bebidacaliente?", "chaimadavid", "cafeintegracion");//Esto hay que cambiarlo por nuestras bases de datos 
@@ -35,6 +35,9 @@ public class OracleConnection {
         } else {
            // Librería de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
+            String user = "cafe-03";
+            String db = "cafe03";
+            String pass = "pass";
             conn = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + puerto + "/" + db + extraConf, user, pass);
             System.out.println("Conexion Caliente");
             //1+conn = (OracleConnection) DriverManager.getConnection("jdbc:mysql://:3306/bebidacaliente?", "chaimadavid", "cafeintegracion");//Esto hay que cambiarlo por nuestras bases de datos 

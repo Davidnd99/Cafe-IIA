@@ -40,7 +40,7 @@ public class OracleConnectionTest {
     @Test
     public void testSomeMethod() throws ClassNotFoundException, SQLException {
         // TODO review the generated test code and remove the default call to fail.
-        OracleConnection c = new OracleConnection('F');
+        OracleConnection c = new OracleConnection('C');
         
         //fail("The test case is a prototype.");
     }
