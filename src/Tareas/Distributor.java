@@ -5,6 +5,7 @@
  */
 package Tareas;
 
+import cafe.Msg;
 import cafe.Slot;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -34,21 +35,22 @@ public class Distributor {
     
     public void Realiza() throws XPathExpressionException{
         
-        Document d;
-        String dato ="";
+        
         while (!Entrada.IsEmpty()) {
+             
+            Msg m = Entrada.Read();
             
-            d = Entrada.Read();
-           
-            NodeList nl = (NodeList) e.evaluate(d, XPathConstants.NODESET);
+            NodeList nl = (NodeList) e.evaluate(m.getBody(), XPathConstants.NODESET);
             Node nNode = (Node) nl.item(0);
-            Element datoe = (Element) nNode;
+            
+            String dato = nNode.getTextContent();
 
-            dato = new String(datoe.getElementsByTagName("type").item(0).getTextContent());
+            //Me puedo ahorrar esta linea si en el main hago en la expresion xpath /drink/type
+            //dato = new String(datoe.getElementsByTagName("type").item(0).getTextContent());
             if (dato.equals("hot")) {
-                Salida1.Write(d);
+                Salida1.Write(m);
             } else if (dato.equals("cold")) {
-                Salida2.Write(d);
+                Salida2.Write(m);
             } else {
                 System.out.println("Error en el tipo");
             }

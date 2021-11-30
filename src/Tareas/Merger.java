@@ -5,6 +5,7 @@
  */
 package Tareas;
 
+import cafe.Msg;
 import cafe.Slot;
 import org.w3c.dom.Document;
 
@@ -18,22 +19,19 @@ public class Merger {
     private Slot Entrada2;
     private Slot Salida;
 
-    Merger(Slot Entrada1, Slot Entrada2, Slot Salida) {
+    public Merger(Slot Entrada1, Slot Entrada2, Slot Salida) {
         this.Entrada1 = Entrada1;
         this.Entrada2 = Entrada2;
         this.Salida = Salida;
     }
 
     public void Realiza() {
-        Document doc1;
-        Document doc2;
+        
         while (!Entrada1.IsEmpty()) {
-            doc1 = Entrada1.Read();
-            Salida.Write(doc1);
+            Salida.Write(Entrada1.Read());
         }
         while (!Entrada2.IsEmpty()) {
-            doc2 = Entrada2.Read();
-            Salida.Write(doc2);
+            Salida.Write(Entrada2.Read());
         }
     }
 

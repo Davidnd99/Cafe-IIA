@@ -4,6 +4,9 @@
  */
 package Puertos;
 
+import Conectores.ConectorCamarero;
+import cafe.Msg;
+import cafe.Slot;
 import org.w3c.dom.Document;
 
 /**
@@ -12,7 +15,9 @@ import org.w3c.dom.Document;
  */
 public class ExitPort {
     
-    private Document doc;
+    private Msg m;
+    private ConectorCamarero conector;
+    private Slot entrada;
 
     //En el puerto de salida lo que hacemos es leer del documento 
     
@@ -20,12 +25,13 @@ public class ExitPort {
         
     }
     
-    public void SetDocument(Document doc){
+    public void SetMsg(Msg m){
         //Colocamos en nuestro documento doc los datos del valor pasado por parametro
-        this.doc = doc;
+        this.m = m;
     }
     
-    public Document Realiza(){
-        return doc;
+    public Msg Realiza(){
+        m = entrada.Read();
+        return m;
     }
 }

@@ -5,7 +5,9 @@
  */
 package Tareas;
 
+import cafe.Msg;
 import cafe.Slot;
+import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,29 +28,35 @@ public class Splitter {
     private XPathExpression e;
     private Slot in;
     private Slot out;
-    private Document d;
+    private Msg m;
 
     public Splitter(Slot out, Slot in, XPathExpression e) {
         this.out = out;
         this.in = in;
-        this.d = in.Read();
         this.e = e;
 
     }
 
     public void Realiza() throws XPathExpressionException, ParserConfigurationException {
-
+        
+        m = in.Read();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        NodeList nl = (NodeList) e.evaluate(d, XPathConstants.NODESET);
-
+        NodeList nl = (NodeList) e.evaluate(m.getBody(), XPathConstants.NODESET);
+        UUID idFrag = UUID.randomUUID();
+        
         for (int i = 0; i < nl.getLength(); i++) {
-            Node nNode = nl.item(i);
             Document doc = db.newDocument();
+            Msg m2 = new Msg(doc);
+            Node nNode = nl.item(i);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-               
-                doc.appendChild( doc.importNode(nNode, true));
-                out.Write(doc);
+                m2.setIdFragment(idFrag);
+                m2.setDocumentoOriginal(m.getBody());
+                m2.setPadreOriginal(nNode.getParentNode());
+                m2.setNumFragmentos(nl.getLength());
+                doc.appendChild(doc.importNode(nNode, true));
+                nNode.getParentNode().removeChild(nNode);
+                out.Write(m2);
             }
         }
 

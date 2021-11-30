@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +30,7 @@ public class ConectorBF extends Conector{
    private SolPort p;
     private OracleConnection c;
 
-    ConectorBF(SolPort p) throws ClassNotFoundException, SQLException{
+    public ConectorBF(SolPort p) throws ClassNotFoundException, SQLException{
         this.p = p;
         c = new OracleConnection('F');
     }
@@ -61,7 +62,9 @@ public class ConectorBF extends Conector{
             Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (TransformerException ex) {
+           Logger.getLogger(ConectorBF.class.getName()).log(Level.SEVERE, null, ex);
+       }
     }
     
     

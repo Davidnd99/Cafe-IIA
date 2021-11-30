@@ -14,24 +14,27 @@ import org.w3c.dom.Document;
  */
 public class Slot {
     
-    private Queue<Document> buffer;
+    private Queue<Msg> buffer;
     
     Slot(){
         //Lista doblemente enlazada
         buffer = new LinkedList<>();
     }
     
-    public void Write(Document doc){
-        buffer.add(doc);
+    public void Write(Msg m){
+        buffer.add(m);
     }
     
-    public Document Read(){
+    public Msg Read(){
         //Devolvemos el primer elemento de la cola
-        return buffer.poll();
+        return buffer.poll(); 
     }
     
     public boolean IsEmpty(){
         return buffer.isEmpty();
     }
     
+    public void Delete(Msg m){
+        buffer.remove(m);
+    }
 }

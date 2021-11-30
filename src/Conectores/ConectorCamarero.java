@@ -7,6 +7,7 @@ package Conectores;
 
 import Conectores.Conector;
 import Puertos.ExitPort;
+import cafe.Msg;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,14 +33,16 @@ public class ConectorCamarero extends Conector {
 
     private ExitPort p;
 
-    ConectorCamarero(ExitPort p) {
+    public ConectorCamarero(ExitPort p) {
         this.p = p;
     }
 
     @Override
     public void Realiza() {
         try {
-            Document d = p.Realiza();
+            Document d;
+            Msg m = p.Realiza();
+            d = m.getBody();
             if (d.equals(null)) {
                 System.out.println("error");
             }

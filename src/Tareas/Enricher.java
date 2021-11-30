@@ -5,6 +5,7 @@
  */
 package Tareas;
 
+import cafe.Msg;
 import cafe.Slot;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,7 +27,7 @@ public class Enricher {
     private Slot in1;
     private Slot in2;
     private Slot out;
-    private XPathExpression e;
+    private XPathExpression e;   //Debe ser /*/* y debe devolver un result con el stock
 
     public Enricher(Slot in1, Slot in2, Slot out, XPathExpression e) {
         this.in1 = in1;
@@ -43,18 +44,24 @@ public class Enricher {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         while (!in1.IsEmpty() && !in2.IsEmpty()) {
+            Msg m1 = in1.Read();
+            Msg m2 = in1.Read();
             Document doc = db.newDocument();
-            NodeList nl1 = (NodeList) e.evaluate(in1.Read(), XPathConstants.NODESET);
-            NodeList nl2 = (NodeList) e.evaluate(in2.Read(), XPathConstants.NODESET);
-            Node nNode = (Node) nl1.item(0);
-            Node nNodes = (Node) nl2.item(0);
-           
+            NodeList nl1 = (NodeList) e.evaluate(m1, XPathConstants.NODESET);
+            NodeList nl2 = (NodeList) e.evaluate(m2, XPathConstants.NODESET);
+            
             Element rootElement = doc.createElement("drink");
             doc.appendChild(rootElement);
-           rootElement.appendChild(doc.importNode(nNode, true));
+            
+            for (int i = 0; i < nl1.getLength(); i++) {
+                Node nNode = (Node) nl1.item(i);
+                rootElement.appendChild(doc.importNode(nNode, true));
+            }
+            Node nNodes = (Node) nl2.item(0);
             rootElement.appendChild(doc.importNode(nNodes, true));
-
-            out.Write(doc);
+            
+            m1.setBody(doc);
+            out.Write(m1);
         }
 
     }

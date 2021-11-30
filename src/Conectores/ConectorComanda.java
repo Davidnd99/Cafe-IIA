@@ -6,6 +6,7 @@ package Conectores;
 
 import Conectores.Conector;
 import Puertos.EntryPort;
+import cafe.Msg;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -39,6 +40,7 @@ public class ConectorComanda extends Conector{
         Document doc = (Document) db.parse(inputFile);
         
         doc.getDocumentElement().normalize();
-        p.Realiza(doc);
+        Msg m = new Msg(doc);
+        p.Realiza(m);
     }
 }

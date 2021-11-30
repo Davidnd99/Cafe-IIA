@@ -6,7 +6,15 @@
 package Tareas;
 
 import Puertos.ExitPort;
+import cafe.Msg;
 import cafe.Slot;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,29 +33,43 @@ import org.w3c.dom.NodeList;
 public class Aggregator {
     
     private Slot Entrada;
+    private Slot Salida;
     private ExitPort ep;
-     private XPathExpression e;
+    private XPathExpression e;
+    private Map<UUID, List<Msg>> mapa=new HashMap<>();
 
-    Aggregator(Slot s, ExitPort p, XPathExpression e) {
+    public Aggregator(Slot s, ExitPort p, XPathExpression e) {
         Entrada = s;
         ep = p;
         this.e=e;
     }
 
-    public void doWork() throws ParserConfigurationException, XPathExpressionException {
+    public void Realiza() throws ParserConfigurationException, XPathExpressionException {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();
         Element rootElement = doc.createElement("cafe_order");
         doc.appendChild(rootElement);
-        while (!Entrada.IsEmpty()) {
-            NodeList nl = (NodeList) e.evaluate(Entrada.Read(), XPathConstants.NODESET);
-            Node nNode = nl.item(0);
-            rootElement.appendChild(doc.importNode(nNode, true));
+        while(!Entrada.IsEmpty()){
+            
+            Msg m=Entrada.Read();
+            List<Msg> lista=mapa.get(m.getIdFragment());
+            if(lista==null){
+                lista=new ArrayList<>();
+                mapa.put(m.getIdFragment(), lista);
+            }
+            lista.add(m);
         }
-
-        ep.SetDocument(doc);
+        
+        for (Map.Entry<UUID, List<Msg>> entry : mapa.entrySet()) {
+            UUID key = entry.getKey();
+            List<Msg> val = entry.getValue();
+            if(val.get(0).getNumFragmentos() == val.size()){
+                Salida.Write(Unir.join(val.toArray(new Msg[0])));
+            }
+        }
+        
     }
     
 }
