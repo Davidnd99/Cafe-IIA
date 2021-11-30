@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 package Conectores;
-
+import Tareas.*;
 import Conectores.Conector;
 import Puertos.ExitPort;
 import cafe.Msg;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -38,32 +40,17 @@ public class ConectorCamarero extends Conector {
     }
 
     @Override
-    public void Realiza() {
+    public Document Realiza(Document doc){
+        
+        String c = Serializador.serialize(doc);
         try {
-            Document d;
-            Msg m = p.Realiza();
-            d = m.getBody();
-            if (d.equals(null)) {
-                System.out.println("error");
-            }
-            //Estamos utilizando los transformadores propios de java
-            //XML transformer to take a DOM document and print out the resulting XML
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            //Separar las etiquetas para que no salgan en una misma linea
-            //enable 'INDENT' and set the indent amount for the transformer
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            Node pdoc;
-            //Como fuente XML usaremos la clase DOMSource, que se puede instanciar pasándole nuestro Document. 
-            //Como destino de la transformación, usaremos un StreamResult, al que pasaremos un File
-            DOMSource domSource = new DOMSource(d);
-            StreamResult streamResult = new StreamResult(new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\Cafe\\src\\cafe\\test.xml"));
-            transformer.transform(domSource, streamResult);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(ConectorCamarero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
+            FileWriter w = new FileWriter("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\Cafe\\src\\cafe\\test.xml");
+            w.write(c);
+            w.close();
+        } catch (IOException ex) {
             Logger.getLogger(ConectorCamarero.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 }
 

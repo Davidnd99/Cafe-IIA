@@ -9,10 +9,13 @@ import Conectores.ConectorBF;
 import Tareas.Translator;
 import cafe.Msg;
 import cafe.Slot;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -30,9 +33,9 @@ public class SolPort {
         this.salida = salida;
     }
     
-    public ArrayList<String> Realiza1() throws XPathExpressionException, TransformerException{
+    public void Realiza1() throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException{
         //Devuelve la sentencia XPath haciendo uso del traductor
-        return t.Realiza();
+        t.Realiza();
     }
     
     public void Realiza2(Document doc){

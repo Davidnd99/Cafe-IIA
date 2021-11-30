@@ -7,6 +7,7 @@ package Conectores;
 import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -15,7 +16,6 @@ import org.xml.sax.SAXException;
  */
 public abstract class Conector {
     
-    public void Realiza() throws ParserConfigurationException, SAXException, IOException{
-        
-    }
+    public abstract Document Realiza(Document doc) throws ParserConfigurationException, SAXException, IOException;
+    
 }
