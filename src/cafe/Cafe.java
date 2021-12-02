@@ -109,7 +109,7 @@ public class Cafe {
         
         Merger m = new Merger(s10, s11, s12);
         
-        Aggregator ag = new Aggregator(s13);
+        //Aggregator ag = new Aggregator(s13);
         
         //Declaraciones 
         /*Slot s1 = new Slot();
