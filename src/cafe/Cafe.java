@@ -20,6 +20,7 @@ import Tareas.Replicator;
 import Tareas.Splitter;
 import Tareas.Translator;
 import cafe.Msg;
+import java.io.File;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
@@ -32,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import sun.jvm.hotspot.code.AdapterBlob;
 
 /**
  *
@@ -45,13 +47,72 @@ public class Cafe {
     public static void main(String[] args) throws XPathExpressionException, ClassNotFoundException, SQLException, ParserConfigurationException, SAXException, IOException {
         // TODO code application logic here
         
+        Slot s1 = new Slot();
+        Slot s2 = new Slot();
+        Slot s3 = new Slot();
+        Slot s4 = new Slot();
+        Slot s5 = new Slot();
+        Slot s6 = new Slot();
+        Slot s7 = new Slot();
+        Slot s8 = new Slot();
+        Slot s9 = new Slot();
+        Slot s10 = new Slot();
+        Slot s11 = new Slot();
+        Slot s12 = new Slot();
+        Slot s13 = new Slot();
+        
         XPath XPath = XPathFactory.newInstance().newXPath();
             //Buscamos la expresion XPath drink
             //Compila la version XPath especificada
             //y devuelve un objeto XPathExpression que representa la expresion XPath
-        XPathExpression e = XPath.compile("drink");
+       
+        
+        //Definir las carpetas de la comanda y el camarero
+        //Comanda
+        File DirComanda = new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\comandas");
+        if (!DirComanda.exists()) {
+            if (DirComanda.mkdirs()) {
+                System.out.println("Directorio creado");
+            } else {
+                System.out.println("Error al crear directorio");
+            }
+        }
+        //Camarero
+        File DirCamarero = new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\camarero");
+        if (!DirCamarero.exists()) {
+            if (DirCamarero.mkdirs()) {
+                System.out.println("Directorio creado");
+            } else {
+                System.out.println("Error al crear directorio");
+            }
+        }
+        
+        //Crear conexion MySQL bebida caliente 
+        OracleConnection con = new OracleConnection('C');
+        
+        //Crear conexion MySQL bebida fria
+        OracleConnection con2 = new OracleConnection('F');
+        
+        XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
+        Splitter sp = new Splitter(s2, s1, e);
+        
+        //XPathExpression e2 = XPath.compile();
+        //Distributor dis = new Distributor(s2, s3, s4, e2);
+        
+        Replicator r = new Replicator(s3, s5, s6);
+        
+        //Translator t = new Translator(s5, s7, );
+        
+        //Correlator c = new Correlator();
+        
+        //Enricher e = new Enricher(s7, s8, s9);
+        
+        Merger m = new Merger(s10, s11, s12);
+        
+        Aggregator ag = new Aggregator(s13);
+        
         //Declaraciones 
-        Slot s1 = new Slot();
+        /*Slot s1 = new Slot();
         Slot s2 = new Slot();
         Slot s3 = new Slot();
         Slot s4 = new Slot();
@@ -102,7 +163,41 @@ public class Cafe {
         cef.Realiza();
         merg.Realiza();
         agregador.Realiza();
-        ccam.Realiza();
+        ccam.Realiza();*/
+        
+        /*Tareas reunidor = p.createTask(MERGER);
+        Task arrejuntador = p.createTask(AGGREGATOR, new String[]{"cafe_order", "drinks"});
+        
+        p.connect(pComandas, divisor);
+        p.connect(divisor, encauzador);
+        p.connect(encauzador, replicadorFrio);
+        p.connect(encauzador, replicadorCaliente);
+        
+        p.connect(replicadorFrio, traductorQuerryFrio);
+        p.connect(traductorQuerryFrio, pBarmanFrio);
+        p.connect(replicadorFrio, juntadorFrio);
+        p.connect(pBarmanFrio, traductorResultadoFrio);
+        p.connect(traductorResultadoFrio, juntadorFrio);
+        p.connect(juntadorFrio, combinadorFrio);
+        p.connect(juntadorFrio, combinadorFrio);
+        p.connect(combinadorFrio, reunidor);
+        
+        p.connect(replicadorCaliente, traductorQuerryCaliente);
+        p.connect(traductorQuerryCaliente, pBarmanCaliente);
+        p.connect(replicadorCaliente, juntadorCaliente);
+        p.connect(pBarmanCaliente, traductorResultadoCaliente);
+        p.connect(traductorResultadoCaliente, juntadorCaliente);
+        p.connect(juntadorCaliente, combinadorCaliente);
+        p.connect(juntadorCaliente, combinadorCaliente);
+        p.connect(combinadorCaliente, reunidor);
+        
+        p.connect(reunidor, arrejuntador);
+        p.connect(arrejuntador, pCamarero);
+        
+        
+        p.validate();
+        p.execute();
+        p.waitToEnd();*/
         
     }
     
