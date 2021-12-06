@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
@@ -30,11 +31,10 @@ public class Splitter {
     private Slot out;
     private Msg m;
 
-    public Splitter(Slot out, Slot in, XPathExpression e) {
+    public Splitter(Slot out, Slot in, XPathExpression e){
         this.out = out;
         this.in = in;
         this.e = e;
-
     }
 
     public void Realiza() throws XPathExpressionException, ParserConfigurationException {

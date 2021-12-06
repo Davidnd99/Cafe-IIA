@@ -60,16 +60,19 @@ public class Cafe {
         Slot s11 = new Slot();
         Slot s12 = new Slot();
         Slot s13 = new Slot();
+        Slot s14 = new Slot();
+        Slot s15 = new Slot();
+        Slot s16 = new Slot();
+        Slot s17 = new Slot();
+        Slot s18 = new Slot();
+        Slot s19 = new Slot();
         
         XPath XPath = XPathFactory.newInstance().newXPath();
-            //Buscamos la expresion XPath drink
-            //Compila la version XPath especificada
-            //y devuelve un objeto XPathExpression que representa la expresion XPath
-       
         
         //Definir las carpetas de la comanda y el camarero
         //Comanda
         File DirComanda = new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\comandas");
+        String dir = DirComanda.toString();
         if (!DirComanda.exists()) {
             if (DirComanda.mkdirs()) {
                 System.out.println("Directorio creado");
@@ -93,23 +96,74 @@ public class Cafe {
         //Crear conexion MySQL bebida fria
         OracleConnection con2 = new OracleConnection('F');
         
-        XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
-        Splitter sp = new Splitter(s2, s1, e);
+        EntryPort ep = new EntryPort(s1);
+        ConectorComanda cc = new ConectorComanda(ep, dir);
         
-        //XPathExpression e2 = XPath.compile();
-        //Distributor dis = new Distributor(s2, s3, s4, e2);
+        /*XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
+        Splitter sp = new Splitter(s2, s1, e);*/
         
+        XPathExpression e2 = XPath.compile("drink");
+        Distributor dis = new Distributor(s2, s3, s4, e2);
+        
+        //PARTE BEBIDA FRIA
         Replicator r = new Replicator(s3, s5, s6);
         
-        //Translator t = new Translator(s5, s7, );
+        //Para hacer la Query 
+        Translator t = new Translator(s5, s7, "<?xml version=\"1.0\"?><xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"><xsl:template match=\"/drink\">"
+                + "<sql>SELECT `Stock` FROM `bebidas` WHERE `Nombre` = '<xsl:value-of select=\"name\"/>'</sql>"
+                + "</xsl:template></xsl:stylesheet>");
         
-        //Correlator c = new Correlator();
+        SolPort sp1 = new SolPort(t, s18);
+        ConectorBC conbc = new ConectorBC(sp1);
         
-        //Enricher e = new Enricher(s7, s8, s9);
+        Correlator c = new Correlator(s6, s8, s18, s9);
         
-        Merger m = new Merger(s10, s11, s12);
+        XPathExpression e3 = XPath.compile("drink");
+        Enricher en = new Enricher(s8, s9, s10, e3);
         
-        //Aggregator ag = new Aggregator(s13);
+        
+        //PARTE BEBIDA CALIENTE
+        Replicator r2 = new Replicator(s4, s11, s12);
+        
+        //Para hacer la Query 
+        Translator t2 = new Translator(s11, s13, "<?xml version=\"1.0\"?><xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"><xsl:template match=\"/drink\">"
+                + "<sql>SELECT `Stock` FROM `bebidas` WHERE `Nombre` = '<xsl:value-of select=\"name\"/>'</sql>"
+                + "</xsl:template></xsl:stylesheet>");
+        
+        SolPort sp2 = new SolPort(t2, s19);
+        ConectorBF conbf = new ConectorBF(sp2);
+        
+        Correlator c2 = new Correlator(s12, s14, s19, s15);
+        
+        XPathExpression e4 = XPath.compile("drink");
+        Enricher en2 = new Enricher(s14, s15, s16, e4);
+        
+        Merger m = new Merger(s10, s16, s17);
+        
+        ExitPort p = new ExitPort();
+        XPathExpression e5 = XPath.compile("drink");
+        Aggregator ag = new Aggregator(s17, p, e5);
+        
+        ConectorCamarero ccam = new ConectorCamarero(p);
+        
+        Document doc = null;
+        
+        cc.Realiza(doc);
+        XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
+        Splitter sp = new Splitter(s2, s1, e);
+        sp.Realiza();
+        dis.Realiza();
+        r.Realiza();
+        r2.Realiza();
+        conbf.Realiza(doc);
+        conbc.Realiza(doc);
+        c.Realiza();
+        c2.Realiza();
+        en.Realiza();
+        en2.Realiza();
+        m.Realiza();
+        ag.Realiza();
+        ccam.Realiza(doc);
         
         //Declaraciones 
         /*Slot s1 = new Slot();
