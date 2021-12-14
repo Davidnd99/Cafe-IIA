@@ -42,6 +42,7 @@ public class Translator {
     public Translator(Slot entrada, Slot salida, String estilo){
         this.entrada = entrada;
         this.estilo = estilo;
+        this.salida = salida;
     }
     
     public void Realiza() throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException{

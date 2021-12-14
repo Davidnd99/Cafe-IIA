@@ -41,8 +41,9 @@ public class ConectorComanda extends Conector{
         if(files.length > 0){
             File file = files[0];
             String c = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-            file.delete();
-            return Parsear.parse(c);
+            //file.delete();
+            Msg m = new Msg(Parsear.parse(c));
+            p.Realiza(m);
         }
         
         return null;

@@ -33,12 +33,6 @@ import org.w3c.dom.Node;
  */
 public class ConectorCamarero extends Conector {
 
-    private ExitPort p;
-
-    public ConectorCamarero(ExitPort p) {
-        this.p = p;
-    }
-
     @Override
     public Document Realiza(Document doc){
         

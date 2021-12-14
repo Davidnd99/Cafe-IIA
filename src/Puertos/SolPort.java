@@ -23,24 +23,48 @@ import org.xml.sax.SAXException;
  */
 public class SolPort {
     
-    private Translator t;
     private Slot salida;
+    private Slot entrada;
     private ConectorBC BC;
     private ConectorBF BF;
     
-    public SolPort(Translator t, Slot salida){
-        this.t = t;
+    public SolPort(Slot entrada, Slot salida){
+        this.salida = salida;
+        this.entrada = entrada;
+    }
+
+    public Slot getSalida() {
+        return salida;
+    }
+
+    public void setSalida(Slot salida) {
         this.salida = salida;
     }
-    
-    public void Realiza1() throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException{
-        //Devuelve la sentencia XPath haciendo uso del traductor
-        t.Realiza();
+
+    public Slot getEntrada() {
+        return entrada;
+    }
+
+    public void setEntrada(Slot entrada) {
+        this.entrada = entrada;
+    }
+
+    public ConectorBC getBC() {
+        return BC;
+    }
+
+    public void setBC(ConectorBC BC) {
+        this.BC = BC;
+    }
+
+    public ConectorBF getBF() {
+        return BF;
+    }
+
+    public void setBF(ConectorBF BF) {
+        this.BF = BF;
     }
     
-    public void Realiza2(Document doc){
-        Msg m = new Msg(doc);
-        salida.Write(m);
-    }
+    
     
 }

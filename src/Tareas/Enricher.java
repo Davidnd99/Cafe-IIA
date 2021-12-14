@@ -45,10 +45,10 @@ public class Enricher {
         DocumentBuilder db = dbf.newDocumentBuilder();
         while (!in1.IsEmpty() && !in2.IsEmpty()) {
             Msg m1 = in1.Read();
-            Msg m2 = in1.Read();
+            Msg m2 = in2.Read();
             Document doc = db.newDocument();
-            NodeList nl1 = (NodeList) e.evaluate(m1, XPathConstants.NODESET);
-            NodeList nl2 = (NodeList) e.evaluate(m2, XPathConstants.NODESET);
+            NodeList nl1 = (NodeList) e.evaluate(m1.getBody(), XPathConstants.NODESET);
+            NodeList nl2 = (NodeList) e.evaluate(m2.getBody(), XPathConstants.NODESET);
             
             Element rootElement = doc.createElement("drink");
             doc.appendChild(rootElement);

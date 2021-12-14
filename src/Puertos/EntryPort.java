@@ -28,4 +28,8 @@ public class EntryPort {
         this.m = m;
         salida.Write(m);
     }
+    
+    public ConectorComanda GetConector(){
+        return conector;
+    }
 }

@@ -63,9 +63,6 @@ public class Correlator {
             }
         }
             
-        out.Write(in.Read());
-        out2.Write(in2.Read());
-        
     }
     
 }

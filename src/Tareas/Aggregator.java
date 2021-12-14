@@ -66,7 +66,7 @@ public class Aggregator {
             UUID key = entry.getKey();
             List<Msg> val = entry.getValue();
             if(val.get(0).getNumFragmentos() == val.size()){
-                Salida.Write(Unir.join(val.toArray(new Msg[0])));
+                ep.Realiza(Unir.join(val.toArray(new Msg[0])));
             }
         }
         

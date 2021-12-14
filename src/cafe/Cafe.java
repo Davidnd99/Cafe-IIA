@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -44,7 +45,7 @@ public class Cafe {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws XPathExpressionException, ClassNotFoundException, SQLException, ParserConfigurationException, SAXException, IOException {
+    public static void main(String[] args) throws XPathExpressionException, ClassNotFoundException, SQLException, ParserConfigurationException, SAXException, IOException, TransformerException {
         // TODO code application logic here
         
         Slot s1 = new Slot();
@@ -71,7 +72,7 @@ public class Cafe {
         
         //Definir las carpetas de la comanda y el camarero
         //Comanda
-        File DirComanda = new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\comandas");
+        File DirComanda = new File("C:\\Users\\David\\Desktop\\comandas");
         String dir = DirComanda.toString();
         if (!DirComanda.exists()) {
             if (DirComanda.mkdirs()) {
@@ -81,7 +82,7 @@ public class Cafe {
             }
         }
         //Camarero
-        File DirCamarero = new File("C:\\Users\\David\\OneDrive\\David\\UNIVERSIDAD\\Curso_4\\CUATRIMESTRE_1\\IIA\\Practicas\\camarero");
+        File DirCamarero = new File("C:\\Users\\David\\Desktop\\camarero");
         if (!DirCamarero.exists()) {
             if (DirCamarero.mkdirs()) {
                 System.out.println("Directorio creado");
@@ -98,22 +99,22 @@ public class Cafe {
         
         EntryPort ep = new EntryPort(s1);
         ConectorComanda cc = new ConectorComanda(ep, dir);
-        
+        ep.GetConector();
         /*XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
         Splitter sp = new Splitter(s2, s1, e);*/
         
-        XPathExpression e2 = XPath.compile("drink");
+        XPathExpression e2 = XPath.compile("/drink/type");
         Distributor dis = new Distributor(s2, s3, s4, e2);
         
-        //PARTE BEBIDA FRIA
+        //PARTE BEBIDA CALIENTE
         Replicator r = new Replicator(s3, s5, s6);
         
         //Para hacer la Query 
         Translator t = new Translator(s5, s7, "<?xml version=\"1.0\"?><xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"><xsl:template match=\"/drink\">"
-                + "<sql>SELECT `Stock` FROM `bebidas` WHERE `Nombre` = '<xsl:value-of select=\"name\"/>'</sql>"
+                + "<sql>SELECT `Stock` FROM `HotDrinks` WHERE `Name` = '<xsl:value-of select=\"name\"/>'</sql>"
                 + "</xsl:template></xsl:stylesheet>");
         
-        SolPort sp1 = new SolPort(t, s18);
+        SolPort sp1 = new SolPort(s7, s18);
         ConectorBC conbc = new ConectorBC(sp1);
         
         Correlator c = new Correlator(s6, s8, s18, s9);
@@ -122,15 +123,15 @@ public class Cafe {
         Enricher en = new Enricher(s8, s9, s10, e3);
         
         
-        //PARTE BEBIDA CALIENTE
+        //PARTE BEBIDA FRIA
         Replicator r2 = new Replicator(s4, s11, s12);
         
         //Para hacer la Query 
         Translator t2 = new Translator(s11, s13, "<?xml version=\"1.0\"?><xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"><xsl:template match=\"/drink\">"
-                + "<sql>SELECT `Stock` FROM `bebidas` WHERE `Nombre` = '<xsl:value-of select=\"name\"/>'</sql>"
+                + "<sql>SELECT `Stock` FROM `ColdDrinks` WHERE `Name` = '<xsl:value-of select=\"name\"/>'</sql>"
                 + "</xsl:template></xsl:stylesheet>");
         
-        SolPort sp2 = new SolPort(t2, s19);
+        SolPort sp2 = new SolPort(s13, s19);
         ConectorBF conbf = new ConectorBF(sp2);
         
         Correlator c2 = new Correlator(s12, s14, s19, s15);
@@ -140,30 +141,29 @@ public class Cafe {
         
         Merger m = new Merger(s10, s16, s17);
         
-        ExitPort p = new ExitPort();
+        ConectorCamarero ccam = new ConectorCamarero();
+        ExitPort p = new ExitPort(ccam);
         XPathExpression e5 = XPath.compile("drink");
         Aggregator ag = new Aggregator(s17, p, e5);
         
-        ConectorCamarero ccam = new ConectorCamarero(p);
-        
-        Document doc = null;
-        
-        cc.Realiza(doc);
         XPathExpression e = XPath.compile("/cafe_order/drinks/drink");
+        
+        cc.Realiza(null);
         Splitter sp = new Splitter(s2, s1, e);
         sp.Realiza();
         dis.Realiza();
         r.Realiza();
         r2.Realiza();
-        conbf.Realiza(doc);
-        conbc.Realiza(doc);
+        t.Realiza();
+        t2.Realiza();
+        conbf.Realiza(null);
+        conbc.Realiza(null);
         c.Realiza();
         c2.Realiza();
         en.Realiza();
         en2.Realiza();
         m.Realiza();
         ag.Realiza();
-        ccam.Realiza(doc);
         
         //Declaraciones 
         /*Slot s1 = new Slot();

@@ -7,6 +7,7 @@ package Conectores;
 import Conectores.Conector;
 import cafe.OracleConnection;
 import Puertos.SolPort;
+import cafe.Msg;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,11 +38,15 @@ public class ConectorBF extends Conector{
      
     @Override
     public Document Realiza(Document doc){
-        try {
+        
+        while(!p.getEntrada().IsEmpty()){
+            try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             
             Statement st = c.crears();
+            Msg m = p.getEntrada().Read();
+            doc = m.getBody();
             ResultSet rs = st.executeQuery(doc.getFirstChild().getTextContent());
             rs.next();
             Document sal = db.newDocument();
@@ -52,13 +57,16 @@ public class ConectorBF extends Conector{
             stock.appendChild(sal.createTextNode(dato));
             rootElement.appendChild(stock);
 
-            return sal;
+            m.setBody(sal);
+            p.getSalida().Write(m);
             
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ConectorBC.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
         
         return null;
     }

@@ -39,8 +39,16 @@ public class Replicator {
             d2 = Parsear.parse(c);
             Msg m = new Msg(d1);
             m.setIdCorrelator(aux.getIdCorrelator());
+            m.setIdFragment(aux.getIdFragment());
+            m.setNumFragmentos(aux.getNumFragmentos());
+            m.setPadreOriginal(aux.getPadreOriginal());
+            m.setDocumentoOriginal(aux.getDocumentoOriginal());
             Msg m2 = new Msg(d2);
             m2.setIdCorrelator(aux.getIdCorrelator());
+            m2.setIdFragment(aux.getIdFragment());
+            m2.setNumFragmentos(aux.getNumFragmentos());
+            m2.setPadreOriginal(aux.getPadreOriginal());
+            m2.setDocumentoOriginal(aux.getDocumentoOriginal());
             Salida1.Write(m);
             Salida2.Write(m2);
         }
